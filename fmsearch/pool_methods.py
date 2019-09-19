@@ -27,10 +27,6 @@ def parse_page(i):
                 'posts': html.unescape(str(posts.contents[0])),
                 'views': html.unescape(str(views.contents[0]))
             }
-            print(type(data['status']))
-            print(type(data['content']))
-            print(type(data['href']))
-            print(type(data['time_ago']))
             return data
         except Exception as e:
             print(e)

@@ -18,6 +18,8 @@ def index():
         merged_page += page
 
     df = pd.DataFrame(merged_page)
+    df = df.dropna()
+    df.href = df.href.apply(lambda path: f"https://www.fredmiranda.com{path}")
+    json_data = df.to_json(orient='records')
     
-    print(pages)
-    return str(df.to_html())
+    return render_template('main.html', json_data=json_data)

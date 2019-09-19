@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Fred Miranda Search</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <script type="text/javascript">
+        const data = {{ json_data | safe }}
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div class="container-fluid">
+            <b-table 
+                striped 
+                hover 
+                :items="filtered" 
+                :fields="fields"
+            >
+                <template slot="top-row" slot-scope="{ fields }">
+                    <td v-for="field in fields" :key="field.key">
+                        <input v-on:input="debounceInput" v-model="filters[field.key]" :placeholder="field.label">
+                    </td>
+                </template>
+            <b-table>
+        </div>
+    </div>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <script type="text/javascript">
+       var app = new Vue({
+            el: '#app',
+            data: {
+                perPage: 20,
+                currentPage: 1,
+                filters: {
+                    status: '',
+                    content: '',
+                    seller: '',
+                    posts: '',
+                    views: '',
+                    time_ago: ''
+                },
+                fields: [
+                    {
+                        key: 'status'
+                    },
+                    {
+                        key: 'content'
+                    },
+                    {
+                        key: 'seller'
+                    },
+                    {
+                        key: 'posts'
+                    },
+                    {
+                        key: 'views'
+                    },
+                    {
+                        key: 'time_ago',
+                        sortable: true
+                    }
+
+                ],
+                items: data
+            },
+            computed: {
+                filtered () {
+                    const filtered = this.items.filter(item => {
+                        return Object.keys(this.filters).every(key =>
+                            String(item[key]).includes(this.filters[key]))
+                    })
+                    return filtered.length > 0 ? filtered : [{
+                        id: '',
+                        issuedBy: '',
+                        issuedTo: ''
+                    }]
+                }
+            },
+            methods: {
+                debounceInput: _.debounce(function (e) {
+                    this.filterKey = e.target.value;
+                }, 500)
+            },
+            delimiters: ['!{', '}']
+        })
+    </script>
+</body>
+</html>
