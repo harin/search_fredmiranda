@@ -32,5 +32,4 @@ def parse_page(i):
             print(e)
             return {}
     parsed = list(map(parse_tr, result))
-    print(type(parsed))
     return parsed

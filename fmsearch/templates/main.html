@@ -36,6 +36,10 @@
                         <input v-on:input="debounceInput" v-model="filters[field.key]" :placeholder="field.label">
                     </td>
                 </template>
+
+                <template v-slot:cell(content)="data">
+                    <a v-bind:href="data.item.href" target="_blank">!{ data.item.content }</a>
+                </template> 
             <b-table>
         </div>
     </div>
